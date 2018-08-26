@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Button } from 'semantic-ui-react';
+import Dummy from './components/dummy';
 
 class App extends Component {
 
@@ -35,7 +36,9 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
         <Button>this is my buttorn</Button>
+        <Dummy />
       </div>
+
     );
   }
 }
