@@ -1,0 +1,15 @@
+.makeCenter{
+    height: 90%; 
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+}
+.basicList{
+    list-style-type: none;
+    font-size: 20px;
+    margin: 0;
+    padding:0;
+}
+.basicList li{
+    text-align: center;
+}
