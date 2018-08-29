@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import {Route, Link } from 'react-router-dom';
-import Index from './components/index';
-import Aux from './components/hoc/Aux';
-import IndivisualPost from './components/indivisualPost/indivisualPost';
-import Main from './components/main/main';
+import {Route } from 'react-router-dom';
+import Aux from './hoc/Aux';
+import IndivisualPost from './indivisualPost/indivisualPost';
+import Main from './main/main';
 
 
 class Routes extends Component{

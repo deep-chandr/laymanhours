@@ -3,7 +3,7 @@ import TopPost from './topPost/topPost';
 import FeaturedPost from './featuredPost/featuredPost';
 import Title from './title/title';
 import Navigation from './navigation/navigation';
-import Routes from '../routes';
+import Routes from './routes';
 
 
 
