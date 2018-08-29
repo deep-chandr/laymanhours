@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import {BrowserRouter, Route} from 'react-router-dom';
 import Index from './components/index';
 
 class App extends Component {
@@ -25,10 +26,11 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <Index />
-      </div>
-
+      <BrowserRouter>
+        <div className="App">
+          <Index />
+        </div>
+      </BrowserRouter>
     );
   }
 }
