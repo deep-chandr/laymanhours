@@ -98,8 +98,7 @@ class Navigation extends Component{
                         
                     </div>
 
-                    <div className="w3-container">
-                        {/* <Title /> */}
+                    <div className="w3-container" style={{'height': '100%','min-height': '95vh','background-color': 'rgb(250, 250, 250)' }}>
                         {this.props.children}
                     </div>
                 </div>
