@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import classes from './featuredPost.css';
-import { Grid, Image, Header,Segment } from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
 import imgsmp from './1.png';
 
 class featuredPost extends Component{
@@ -91,18 +91,18 @@ class featuredPost extends Component{
                                                             <Grid  columns={2} >
                                                                 <Grid.Row stretched>
                                                                 <Grid.Column style={{ 'padding': '0'}}>
-                                                                    <img src={val.imgArr[0]} style={{'height': '100%', 'object-fit': 'cover', 'width': '100%', 'background-color': 'red'}} />
-                                                                    <img src={val.imgArr[1]} style={{'height': '100%', 'object-fit': 'cover', 'width': '100%'}} />
+                                                                    <img alt='' src={val.imgArr[0]} style={{'height': '100%', 'object-fit': 'cover', 'width': '100%', 'background-color': 'red'}} />
+                                                                    <img alt='' src={val.imgArr[1]} style={{'height': '100%', 'object-fit': 'cover', 'width': '100%'}} />
                                                                 </Grid.Column>
                                                                 <Grid.Column  style={{ 'padding': '0'}}>
-                                                                    <img src={val.imgArr[2]} style={{'height': '100%', 'object-fit': 'cover', 'width': '100%'}} />
-                                                                    <img src={val.imgArr[3]} style={{'height': '100%', 'object-fit': 'cover', 'width': '100%'}} />
+                                                                    <img alt='' src={val.imgArr[2]} style={{'height': '100%', 'object-fit': 'cover', 'width': '100%'}} />
+                                                                    <img alt='' src={val.imgArr[3]} style={{'height': '100%', 'object-fit': 'cover', 'width': '100%'}} />
                                                                 </Grid.Column>
                                                                 </Grid.Row>
                                                             </Grid>
                                                         </Grid.Column>
                                                         <Grid.Column width={5} style={{ 'padding': '0'}}>
-                                                            <img src={val.imgArr[4]} style={{ 'object-fit': 'cover', 'width': '100%'}} />
+                                                            <img alt='' src={val.imgArr[4]} style={{ 'object-fit': 'cover', 'width': '100%'}} />
                                                         </Grid.Column>
                                                     </Grid.Row>
                                                 </Grid>

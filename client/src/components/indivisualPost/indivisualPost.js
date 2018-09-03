@@ -28,7 +28,7 @@ class IndivisualPost extends Component{
         return <MyContainer>
             <div className={classes.postContent}>
                 <h1 className={classes.mainHeading}>{currentPost.title}</h1>
-                <img src={currentPost.imgList} style={{'width': '100%'}} />
+                <img alt='' src={currentPost.imgList} style={{'width': '100%'}} />
                 <p>{currentPost.content}</p>
             </div>
             <div className={classes.postFeedback}></div>

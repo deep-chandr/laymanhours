@@ -6,7 +6,7 @@ import imgtitle from '../2.jpg';
 import Link from 'react-router-dom/Link';
 
 
-import { Slide, Zoom, Flip, Bounce } from 'react-toastify';
+import { Flip } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
 
 class Navigation extends Component{
@@ -104,7 +104,7 @@ class Navigation extends Component{
                     <div>
                         <div>
                             <div style={{"position": 'absolute', 'z-index': '-100'}}>
-                                <img src={imgtitle} style={{'object-fit': 'cover', 'height': '100px', 'width': '100%'}} />
+                                <img alt='' src={imgtitle} style={{'object-fit': 'cover', 'height': '100px', 'width': '100%'}} />
                             </div>
 
                             <div style={{  'height': '100px', 
