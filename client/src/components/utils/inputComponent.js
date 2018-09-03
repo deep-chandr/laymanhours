@@ -60,7 +60,7 @@ class InputComponent extends Component{
                                 editor={ ClassicEditor }
                                 data={this.state.inputFields[val.key]}
                                 onInit={ editor => {
-                                    console.log( 'Editor is ready to use!', editor );
+                                    // console.log( 'Editor is ready to use!', editor );
                                 } }
                                 onChange={ this.onChangeEditor.bind(this, val.key) }
                             />
