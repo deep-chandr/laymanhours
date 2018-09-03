@@ -6,10 +6,10 @@ import FeaturedPost from '../featuredPost/featuredPost';
 class Main extends Component {
     render(){
         return (
-            <div>
+            <Aux>
                 <TopPost />
                 <FeaturedPost />
-            </div>
+            </Aux>
         );
     }
 }

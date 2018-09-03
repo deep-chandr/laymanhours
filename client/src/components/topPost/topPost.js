@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import classes from './topPost.css';
-import { Grid, Image, Header, Button } from 'semantic-ui-react';
-import imgsmp from './1.png';
+import { Grid, Image } from 'semantic-ui-react';
 import Slider from "react-slick";
 import { getTopPostData } from '../utils/apiCall';
 import { NotifyMe } from '../utils/notifyMe';
+import { inject, observer } from 'mobx-react';
 
 
 class topPost extends Component{
@@ -17,14 +17,18 @@ class topPost extends Component{
         }
     }
     componentDidMount(){
+        const store = this.props.mainStore; 
+        if(!store.posts.length){
+            this.getPosts();
+        }
+    }
+    getPosts = () => {
+        const store = this.props.mainStore; 
         getTopPostData()
             .then(res => {
-                this.setState({
-                    posts : res.data
-                })
+                store.posts = res.data;
             })
             .catch(err => NotifyMe('error', JSON.stringify(err)))
-        
     }
     sliderNext() {
         this.carousel.slickNext();
@@ -34,8 +38,9 @@ class topPost extends Component{
     }
     
     render(){
+        const store = this.props.mainStore;
         var settings = {
-            dots: true,
+            dots: false,
             infinite: true,
             speed: 500,
             slidesToShow: 1,
@@ -43,7 +48,6 @@ class topPost extends Component{
             draggable : true
           };
         return <div className={classes.topPost}>
-        
             <Grid>
                 <Grid.Row>
                     <Grid.Column width={1} className={classes.arrowSpace}>
@@ -56,7 +60,6 @@ class topPost extends Component{
                             <Grid>
                                 <Grid.Row>
                                     <Grid.Column width={12} className={classes.main}>
-
                                         <h1 className={classes.header} size='huge'>
                                             <span className={classes.headWord1}>Top</span> 
                                             <span className={classes.headWord2}>Post</span>
@@ -66,9 +69,11 @@ class topPost extends Component{
                                                 <Grid.Column width={16} className={classes.main}>
                                                 <Slider {...settings} ref={node => this.carousel = node } >
                                                     {
-                                                        this.state.posts.map((val, i) => {
+                                                        store.posts.map((val, i) => {
                                                             return <div>
-                                                                <Image src={val.imgList} />
+                                                                <div style={{ 'background-color': 'rgb(246, 247, 251)'}}>
+                                                                    <Image style={{'max-height': '500px'}} centered src={val.imgList} />
+                                                                </div>
                                                                 <div className={classes.center} >
                                                                     <h1>{val.title}</h1>
                                                                     <span>{val.date} | {val.time}</span>
@@ -84,11 +89,6 @@ class topPost extends Component{
                                                     
                                                 </Grid.Column>
                                             </Grid.Row>
-                                            {/* <Grid.Row>
-                                                <Grid.Column width={16} className={classes.mainHeading}>
-                                                    
-                                                </Grid.Column>
-                                            </Grid.Row> */}
                                         </Grid>
                                     </Grid.Column>
                                     <Grid.Column width={4}>
@@ -113,4 +113,4 @@ class topPost extends Component{
     }
 }
 
-export default topPost;
+export default inject('mainStore')(observer(topPost));

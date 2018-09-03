@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
-import {BrowserRouter, Route} from 'react-router-dom';
+import {BrowserRouter} from 'react-router-dom';
 import Index from './components/index';
-import { apiCallTest, getApiTestData } from './components/utils/apiCall';
+import {Provider} from 'mobx-react';
+import MainStore from './store/mainStore';
 
 class App extends Component {
 
@@ -14,7 +15,9 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="App">
-          <Index />
+          <Provider mainStore={MainStore}>
+            <Index />
+          </Provider>
         </div>
       </BrowserRouter>
     );
