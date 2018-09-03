@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import MyContainer from '../hoc/myContainer';
 import InputComponent from '../utils/inputComponent';
 
+import { Button } from 'semantic-ui-react';
 import {NotifyMe} from '../utils/notifyMe';
+import { getApiTestData } from '../utils/apiCall';
 
 
 
@@ -27,6 +29,19 @@ class AddNewPost extends Component{
         NotifyMe('warning', 'first notification');
         NotifyMe('error', 'first notification');
     }
+    makeApiCall = () => {
+        getApiTestData()
+            .then(response => {
+                console.log(response)
+                NotifyMe('success', JSON.stringify(response.data));
+            })
+            .catch(err => {
+                console.log(err)
+                NotifyMe('error', err);
+            })
+            
+
+    }
 
     onSubmit = (data) => {
         console.log('Im called', data)
@@ -34,7 +49,8 @@ class AddNewPost extends Component{
     }
     render(){
         return(<MyContainer>
-            <button onClick={this.notify}>Make Notify</button>
+            <Button onClick={this.notify}>Make Notify</Button>
+            <Button onClick={this.makeApiCall}>Test Api</Button>
 
             <div style={{'background-color': ''}}>
                 <h1>Add New Post</h1>
