@@ -3,6 +3,11 @@ import classes from './navigation.css';
 import Aux from '../hoc/Aux';
 
 import imgtitle from '../2.jpg';
+import Link from 'react-router-dom/Link';
+
+
+import { Slide, Zoom, Flip, Bounce } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 class Navigation extends Component{
     w3_open() {
@@ -38,13 +43,36 @@ class Navigation extends Component{
     }
     componentDidMount(){
         this.setState({
-            navItems:['Home', 'A History Of Layman Hours-All Post', 'About Us', 'Contact Page', 'Privacy Policy', 'Media']
+            navItems:[
+                {'name': 'home', 'route' : '/'}, 
+                {'name': 'A History Of Layman Hours-All Post', 'route' : '/post'}, 
+                {'name': 'About Us', 'route' : '/'}, 
+                {'name': 'Contact Page', 'route' : '/'}, 
+                {'name': 'Privacy Policy', 'route' : '/'}, 
+                {'name': 'Media', 'route' : '/'}, 
+                {'name': 'Add New Post', 'route' : '/addnewpost'}
+            ]
         })
     }
 
     render(){
         return(
             <Aux>
+                {/* for rendering notifications */}
+                <ToastContainer 
+                    position="top-center"
+                    autoClose={5000}
+                    hideProgressBar
+                    newestOnTop
+                    closeOnClick
+                    rtl={false}
+                    pauseOnVisibilityChange
+                    draggable={false}
+                    pauseOnHover
+                    transition={Flip}
+                />
+                
+                {/* this part belongs to rendering the navigation contents on all routes */}
                 <div className="w3-sidebar w3-bar-block w3-card w3-animate-left" 
                 style={{'display': 'none'}} 
                 // id="mySidebar"
@@ -58,7 +86,9 @@ class Navigation extends Component{
                             <div>
                                 <h1 style={{'text-align': 'center'}}>Layman Hours</h1>
                                 <ul className={classes.basicList} style={{}}>
-                                    {this.state.navItems.map(val => <li>{val}</li>)}
+                                    {this.state.navItems.map(val => {
+                                        return <Link to={val.route}><li>{val.name}</li></Link>
+                                    })}
                                 </ul>
                             </div>
                             
