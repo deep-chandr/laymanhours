@@ -15,3 +15,7 @@ export const getApiTestData = () => {
 export const getTopPostData = () => {
     return callAPI('get', '/api/toppost');
 }
+
+export const addNewPost = (data) => {
+    return callAPI('post', '/api/addpost', data);
+}

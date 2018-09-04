@@ -4,7 +4,7 @@ import InputComponent from '../utils/inputComponent';
 
 import { Button } from 'semantic-ui-react';
 import {NotifyMe} from '../utils/notifyMe';
-import { getApiTestData } from '../utils/apiCall';
+import { getApiTestData, addNewPost } from '../utils/apiCall';
 
 
 
@@ -18,7 +18,9 @@ class AddNewPost extends Component{
                 {'name': 'Title', 'key': 'title', 'type': 'stringtype', 'not-empty': true},
                 {'name': 'Description', 'key': 'description', 'type': 'stringtype', 'not-empty': true},
                 {'name': 'Category', 'key': 'category', 'type': 'stringtype', 'not-empty': true},
-                {'name': 'Content', 'key': 'content', 'type': 'editor', 'not-empty': true}
+                {'name': 'Content', 'key': 'content', 'type': 'editor', 'not-empty': true},
+                {'name': 'Author', 'key': 'author', 'type': 'stringtype', 'not-empty': true},
+                {'name': 'Image Link', 'key': 'imgList', 'type': 'stringtype', 'not-empty': true}
             ]
         }
     }
@@ -45,7 +47,17 @@ class AddNewPost extends Component{
 
     onSubmit = (data) => {
         console.log('Im called', data)
-        data = JSON.stringify(data);
+        // data = JSON.stringify(data);
+        
+        NotifyMe('success', JSON.stringify(data));
+        addNewPost(data)
+            .then(response => {
+                NotifyMe('success', JSON.stringify(response.data));
+            })
+            .catch(err => {
+                NotifyMe('error', JSON.stringify(err));
+            })
+
     }
     render(){
         return(<MyContainer>
