@@ -5,7 +5,8 @@ import Slider from "react-slick";
 import { getTopPostData } from '../utils/apiCall';
 import { NotifyMe } from '../utils/notifyMe';
 import { inject, observer } from 'mobx-react';
-
+import {Link} from 'react-router-dom';
+import withRouter from 'react-router-dom/withRouter';
 
 class topPost extends Component{
     constructor(props) {
@@ -16,17 +17,19 @@ class topPost extends Component{
             posts : []
         }
     }
-    componentDidMount(){
+    componentWillMount(){
         const store = this.props.mainStore; 
         if(!store.posts.length){
             this.getPosts();
         }
     }
+
     getPosts = () => {
         const store = this.props.mainStore; 
         getTopPostData()
             .then(res => {
                 store.posts = res.data;
+                this.forceUpdate();
             })
             .catch(err => NotifyMe('error', JSON.stringify(err)))
     }
@@ -38,6 +41,7 @@ class topPost extends Component{
     }
     
     render(){
+        console.log(this.props.match)
         const store = this.props.mainStore;
         var settings = {
             dots: false,
@@ -76,7 +80,7 @@ class topPost extends Component{
                                                                         <Image style={{'max-height': '500px'}} centered src={val.imgList} />
                                                                     </div>
                                                                     <div className={classes.center} >
-                                                                        <h1>{val.title}</h1>
+                                                                        <Link to={{ pathname: this.props.match.url  +'post', search : '?id=' + val.id }}><h1>{val.title}</h1></Link>
                                                                         <span>{val.datetime}</span>
                                                                     </div>
             
@@ -182,4 +186,4 @@ class topPost extends Component{
     }
 }
 
-export default inject('mainStore')(observer(topPost));
+export default inject('mainStore')(observer(withRouter(topPost)));

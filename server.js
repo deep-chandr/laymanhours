@@ -5,15 +5,6 @@ var path = require('path');
 var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
-// "dependencies": {
-//   "express": "~4.0.0",
-//   "static-favicon": "~1.0.0",
-//   "morgan": "~1.0.0",
-//   "cookie-parser": "~1.0.1",
-//   "body-parser": "~1.0.0",
-//   "debug": "~0.7.4",
-//   "jade": "~1.3.0"
-// }
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -21,6 +12,9 @@ const port = process.env.PORT || 5000;
 var routes = require('./routes/index');
 var apis = require('./routes/api');
 
+// // view engine setup
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'jade');
 
 app.use(favicon());
 app.use(logger('dev'));
