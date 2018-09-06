@@ -1,5 +1,5 @@
 import React , {Component} from 'react';
-import { Input , Grid, Button } from 'semantic-ui-react';
+import { Input , Grid, Button, TextArea, Form } from 'semantic-ui-react';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
@@ -66,20 +66,44 @@ class InputComponent extends Component{
                             />
                         </Grid.Column>
                     </Grid.Row>
-                } else{
+                }
+                else if(val.type === 'textareaType'){
+                
                     return <Grid.Row>
                         <Grid.Column width={3}>
                             <p>{val.name}</p>
                         </Grid.Column>
                         <Grid.Column width={13}>
-                            <Input placeholder='Search...' />
+                        <Form>
+                            <TextArea 
+                                placeholder='Tell us more' 
+                                onChange={this.onChangeStringType} 
+                                name={val.key}
+                            />
+                        </Form>
+                        </Grid.Column>
+                    </Grid.Row>
+                }
+                else{
+                    return <Grid.Row>
+                        <Grid.Column width={3}>
+                            <p>{val.name}</p>
+                        </Grid.Column>
+                        <Grid.Column width={13}>
+                            <Input 
+                                onChange={this.onChangeStringType} 
+                                placeholder={val.name} 
+                                name={val.key}
+                            />
                         </Grid.Column>
                     </Grid.Row>
                 }
             })
         }
         <Grid.Row>
-            <Button primary onClick={this.onSubmit.bind(this)}>Submit</Button>
+            <Grid.Column width={16}>
+                <Button primary onClick={this.onSubmit.bind(this)}>Submit</Button>
+            </Grid.Column>
         </Grid.Row>
     </Grid>
     }

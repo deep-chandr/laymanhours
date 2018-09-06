@@ -1,7 +1,29 @@
-.postContent{
+
+.mainHeading{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    background-color: white;
     text-align: center;
 }
-.mainHeading{
-    font-family: 'Roboto', sans-serif;
+/* .content{
+    font-size : 18px;
+    font-family: 'Titillium Web', sans-serif;
+    color: #333333;
+    line-height: 30px;
+} */
+
+
+.content{
+    font-size : 18px;
+    font-family: 'Montserrat', sans-serif;
+    color: #333333;
+    line-height: 24px;
+    font-weight: 200;
+    letter-spacing: 1px;
+    word-spacing: 2px;
+}
+.authorWrapper{
     background-color: white;
+    padding : 8%;
+    height: 100vh;
 }
