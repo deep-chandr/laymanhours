@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import classes from './topPost.css';
-import { Grid, Image, Comment } from 'semantic-ui-react';
+import { Grid, Image } from 'semantic-ui-react';
 import Slider from "react-slick";
 import { getTopPostData } from '../utils/apiCall';
 import { NotifyMe } from '../utils/notifyMe';
 import { inject, observer } from 'mobx-react';
 import {Link} from 'react-router-dom';
 import withRouter from 'react-router-dom/withRouter';
+import CommentHandler from '../utils/commentHandler/commentHandler';
+import ReactHtmlParser from 'react-html-parser';
+import moment from 'moment';
 
 class topPost extends Component{
     constructor(props) {
@@ -39,9 +42,11 @@ class topPost extends Component{
     sliderPrevious() {
         this.carousel.slickPrev();
     }
-    
+    updatePage =() => {
+        NotifyMe('success', 'imcalled')
+        this.getPosts();
+    }
     render(){
-        console.log(this.props.match)
         const store = this.props.mainStore;
         var settings = {
             dots: false,
@@ -81,76 +86,19 @@ class topPost extends Component{
                                                                     </div>
                                                                     <div className={classes.center} >
                                                                         <Link to={{ pathname: this.props.match.url  +'post', search : '?id=' + val.id }}><h1>{val.title}</h1></Link>
-                                                                        <span>{val.datetime}</span>
+                                                                        <span>
+                                                                        { moment.unix(parseInt(val.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a") !== 'Invalid date'
+                                                                            ? moment.unix(parseInt(val.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a")
+                                                                            : ''
+                                                                        } 
+                                                                        </span>
                                                                     </div>
             
                                                                     <div className={classes.content}>
-                                                                        <p>{val.content}</p>
+                                                                        <p>{ ReactHtmlParser(val.content) }</p>
                                                                     </div>
-                                                                        <h3>Comments</h3>
-                                                                    <div>
-                                                                    <Comment.Group>
-                                                                    <Comment>
-                                                                        <Comment.Avatar src='http://avatarbox.net/avatars/img26/looney_toons_bugs_bunny_avatar_picture_21244.png' />
-                                                                        <Comment.Content>
-                                                                            <Comment.Author as='a'>Matt</Comment.Author>
-                                                                            <Comment.Metadata>
-                                                                            <div>Today at 5:42PM</div>
-                                                                            </Comment.Metadata>
-                                                                            <Comment.Text>How artistic!</Comment.Text>
-                                                                            <Comment.Actions>
-                                                                            <Comment.Action>Reply</Comment.Action>
-                                                                            </Comment.Actions>
-                                                                        </Comment.Content>
-                                                                    </Comment>
-                                                                    <Comment>
-                                                                        <Comment.Avatar src='http://avatarbox.net/avatars/img26/looney_toons_bugs_bunny_avatar_picture_21244.png' />
-                                                                        <Comment.Content>
-                                                                            <Comment.Author as='a'>Elliot Fu</Comment.Author>
-                                                                            <Comment.Metadata>
-                                                                            <div>Yesterday at 12:30AM</div>
-                                                                            </Comment.Metadata>
-                                                                            <Comment.Text>
-                                                                            <p>This has been very useful for my research. Thanks as well!</p>
-                                                                            </Comment.Text>
-                                                                            <Comment.Actions>
-                                                                            <Comment.Action>Reply</Comment.Action>
-                                                                            </Comment.Actions>
-                                                                        </Comment.Content>
-                                                                        <Comment.Group>
-                                                                            <Comment>
-                                                                            <Comment.Avatar src='http://avatarbox.net/avatars/img26/looney_toons_bugs_bunny_avatar_picture_21244.png' />
-                                                                            <Comment.Content>
-                                                                                <Comment.Author as='a'>Jenny Hess</Comment.Author>
-                                                                                <Comment.Metadata>
-                                                                                <div>Just now</div>
-                                                                                </Comment.Metadata>
-                                                                                <Comment.Text>Elliot you are always so right :)</Comment.Text>
-                                                                                <Comment.Actions>
-                                                                                <Comment.Action>Reply</Comment.Action>
-                                                                                </Comment.Actions>
-                                                                            </Comment.Content>
-                                                                            </Comment>
-                                                                        </Comment.Group>
-                                                                        </Comment>
-
-                                                                        <Comment>
-                                                                        <Comment.Avatar src='http://avatarbox.net/avatars/img26/looney_toons_bugs_bunny_avatar_picture_21244.png' />
-                                                                        <Comment.Content>
-                                                                            <Comment.Author as='a'>Joe Henderson</Comment.Author>
-                                                                            <Comment.Metadata>
-                                                                            <div>5 days ago</div>
-                                                                            </Comment.Metadata>
-                                                                            <Comment.Text>Dude, this is awesome. Thanks so much</Comment.Text>
-                                                                            <Comment.Actions>
-                                                                            <Comment.Action>Reply</Comment.Action>
-                                                                            </Comment.Actions>
-                                                                        </Comment.Content>
-                                                                    </Comment>
-                                                                    </Comment.Group>
-                                                                        
-                                                                    
-                                                                    </div>
+                                                                    <h3>Comments</h3>
+                                                                    <CommentHandler post={val} updateComment={this.updatePage} /> 
                                                                     
                                                                 </div>
                                                             })
