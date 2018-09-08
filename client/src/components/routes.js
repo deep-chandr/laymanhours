@@ -4,6 +4,7 @@ import Aux from './hoc/Aux';
 import IndivisualPost from './indivisualPost/indivisualPost';
 import Main from './main/main';
 import AddNewPost from './addNewPost/addNewPost';
+import SignIn from './authFile/signIn';
 
 
 class Routes extends Component{
@@ -15,6 +16,9 @@ class Routes extends Component{
             <Route path='/addnewpost'
                 exact
                 component={AddNewPost} />
+            <Route path='/signin'
+                exact
+                component={SignIn} />
             <Route path='/'
                 exact
                 component={Main} />

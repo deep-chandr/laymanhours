@@ -44,13 +44,15 @@ class Navigation extends Component{
     componentDidMount(){
         this.setState({
             navItems:[
+                {'name': 'Sign In', 'route' : '/signin'},
                 {'name': 'home', 'route' : '/'}, 
                 {'name': 'A History Of Layman Hours-All Post', 'route' : '/post'}, 
                 {'name': 'About Us', 'route' : '/'}, 
                 {'name': 'Contact Page', 'route' : '/'}, 
                 {'name': 'Privacy Policy', 'route' : '/'}, 
                 {'name': 'Media', 'route' : '/'}, 
-                {'name': 'Add New Post', 'route' : '/addnewpost'}
+                {'name': 'Add New Post', 'route' : '/addnewpost'},
+                {'name': 'Sign In', 'route' : '/signin'}
             ]
         })
     }
@@ -85,13 +87,12 @@ class Navigation extends Component{
                         <div className={classes.makeCenter}>
                             <div>
                                 <h1 style={{'text-align': 'center'}}>Layman Hours</h1>
-                                <ul className={classes.basicList} style={{}}>
+                                <ul className={classes.basicList}>
                                     {this.state.navItems.map(val => {
                                         return <Link to={val.route}><li>{val.name}</li></Link>
                                     })}
                                 </ul>
                             </div>
-                            
                         </div>
                     </div>
                 </div>
@@ -128,7 +129,7 @@ class Navigation extends Component{
                         
                     </div>
 
-                    <div className="w3-container" style={{'height': '100%','min-height': '95vh','background-color': 'rgb(250, 250, 250)' }}>
+                    <div className="w3-container" style={{'height': '100%','min-height': '95vh','background-color': 'rgb(250, 250, 250)', 'margin': '0', 'padding': '0' }}>
                         {this.props.children}
                     </div>
                 </div>
