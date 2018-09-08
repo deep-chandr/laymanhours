@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import Aux from '../hoc/Aux';
 import TopPost from '../topPost/topPost';
 import FeaturedPost from '../featuredPost/featuredPost';
 import MasonaryContainer from '../utils/masonaryReactVirtualized/masonaryContainer';
+import {inject, observer } from 'mobx-react';
 
 class Main extends Component {
     render(){
@@ -10,11 +10,12 @@ class Main extends Component {
             <div>
                 <TopPost />
                 <FeaturedPost />
-                <div style={{ 'width': '90%', 'margin': '0 auto' }}>
+                {/* <div style={{ 'width': '90%', 'margin': '0 auto' }}>
                     <MasonaryContainer />
-                </div>
+                </div> */}
             </div>
         );
     }
 }
-export default Main;
+
+export default inject()(observer(Main));

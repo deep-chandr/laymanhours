@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Grid, Image, Comment , Form, Button} from 'semantic-ui-react';
+import { Comment } from 'semantic-ui-react';
 import InputComponent from '../inputComponent';
 import { NotifyMe } from '../notifyMe';
 import { addComment } from '../apiCall';

@@ -38,7 +38,7 @@ class IndivisualPost extends Component{
                     currentPost : store.posts[val]
                 })
             }
-            return;
+            return null;
         })
     }
     searchTheAuthor = () => {

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import MyContainer from '../hoc/myContainer';
-import { Grid, Input, Menu, Segment, Image, Button } from 'semantic-ui-react';
-import imgsmp from '../2.jpg';
+import { Grid, Menu, Segment, Button } from 'semantic-ui-react';
 import InputComponent from '../utils/inputComponent';
 import { authenticateUser, newAuthenticateUser, currentUserDetails, signoutuser } from '../utils/apiCall';
 import { NotifyMe } from '../utils/notifyMe';

@@ -4,7 +4,6 @@ import {BrowserRouter} from 'react-router-dom';
 import Index from './components/index';
 import {Provider} from 'mobx-react';
 import MainStore from './store/mainStore';
-
 class App extends Component {
 
   state = {
@@ -13,13 +12,13 @@ class App extends Component {
 
   render() {
     return (
-      <BrowserRouter>
-        <div className="App">
+      <div className="App">
+        <BrowserRouter>
           <Provider mainStore={MainStore}>
             <Index />
           </Provider>
-        </div>
-      </BrowserRouter>
+        </BrowserRouter>
+      </div>
     );
   }
 }
