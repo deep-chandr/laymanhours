@@ -77,7 +77,7 @@ class featuredPost extends Component{
                 </Grid.Row>
                 <Grid.Row>
                     <Grid.Column width={16}>
-                        <div style={{ 'background-color': '', 'padding': '0 5%' }}>
+                        <div style={{ 'background-color': '', 'padding': '0 15%' }}>
                             <Grid doubling columns={2}>
                                 <Grid.Row stretched >
                                     {

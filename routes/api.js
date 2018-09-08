@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-const dbfunc = require("./dbaccess/firebase");
-
+const dbfunc = require("../utils/firebaseFunc/dbaccess/firebase");
+const verifyFunc = require('../utils/verificationFunc/verification');
 
 router.get('/', function(req, res) {
     res.send('respond with a resource');
@@ -21,6 +21,24 @@ router.get('/authordetails/:id', (req, res) => {
         res.send(author);
     });
 });
+router.get('/currentuserdetails', (req, res) => {
+    dbfunc.currentUserDetails(function(details){
+        res.send(details);
+    });
+});
+router.get('/signoutuser', (req, res) => {
+    dbfunc.signOutUser(function(details){
+        res.send(details);
+    });
+});
+
+
+
+
+
+
+
+
 
 router.post('/addpost', (req, res) => {
     var obj = req.body;
@@ -49,7 +67,29 @@ router.post('/addcomment', (req, res) => {
     dbfunc.saveComment(postid, obj, function(data){
         res.send(data);
     })
-
 });
+router.post('/authenticateuser', (req, res) => {
+    var obj = req.body;
+    if(!verifyFunc.isEmailTrue(obj.email)){
+        res.send('Please enter a valid email.')
+    }else{
+        dbfunc.authenticateUser(obj, function(data){
+            res.send(data);
+        })
+    }
+});
+
+router.post('/newauthenticateuser', (req, res) => {
+    var obj = req.body;
+    if(!verifyFunc.isEmailTrue(obj.email)){
+        res.send('Please enter a valid email.')
+    }else{
+        dbfunc.newAuthenticateUser(obj, function(data){
+            res.send(data);
+        })
+    }
+    
+});
+
 
 module.exports = router;

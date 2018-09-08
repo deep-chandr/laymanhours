@@ -5,6 +5,7 @@ import InputComponent from '../utils/inputComponent';
 import { Button } from 'semantic-ui-react';
 import {NotifyMe} from '../utils/notifyMe';
 import { getApiTestData, addNewPost, addNewAuthor } from '../utils/apiCall';
+// import MyMasonry from '../utils/masonaryReactVirtualized/masonaryReactVirtualized'
 
 
 
@@ -89,6 +90,7 @@ class AddNewPost extends Component{
     }
     render(){
         return(<MyContainer>
+            {/* <MyMasonry /> */}
             <Button onClick={this.notify}>Make Notify</Button>
             <Button onClick={this.makeApiCall}>Test Api</Button>
 

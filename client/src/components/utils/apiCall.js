@@ -28,3 +28,17 @@ export const addNewAuthor = (data) => {
 export const addComment = (data) => {
     return callAPI('post', '/api/addcomment', data);
 }
+export const authenticateUser = (data) => {
+    return callAPI('post', '/api/authenticateuser', data);
+}
+export const newAuthenticateUser = (data) => {
+    return callAPI('post', '/api/newauthenticateuser', data);
+}
+
+
+export const currentUserDetails = (data) => {
+    return callAPI('get', '/api/currentuserdetails', data);
+}
+export const signoutuser = (data) => {
+    return callAPI('get', '/api/signoutuser', data);
+}

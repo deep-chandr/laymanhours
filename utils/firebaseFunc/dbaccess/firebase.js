@@ -10,7 +10,24 @@ var config = {
 firebase.initializeApp(config);
 const database = firebase.database();
 
+var currentUserDetails = null;
 
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // User is signed in.
+      currentUserDetails = {};
+      currentUserDetails.displayName = user.displayName;
+      currentUserDetails.email = user.email;
+      currentUserDetails.emailVerified = user.emailVerified;
+      currentUserDetails.photoURL = user.photoURL;
+      currentUserDetails.isAnonymous = user.isAnonymous;
+      currentUserDetails.uid = user.uid;
+      currentUserDetails.providerData = user.providerData;
+    } else {
+        currentUserDetails = null;
+        // User is signed out.
+    }
+});
 exports.saveNewPost = function(obj, callback) {
     return database.ref('allpost/' + obj.datetime).set(obj, function(error) {
         if (error) {
@@ -54,8 +71,6 @@ exports.fetchAuthor = function(authorName, callback) {
 }
 
 exports.saveComment = function(postid, obj, callback) {
-    // //if comments exists in post
-
     return database.ref('allpost/' + postid + '/comments').once('value',
         function(snapshot) {
             if(snapshot.val() !== null){
@@ -108,4 +123,39 @@ exports.saveComment = function(postid, obj, callback) {
             return callback('Error fetching data , try again.')
         }
     );
+}
+exports.authenticateUser = function(obj, callback) {
+    return firebase.auth().signInWithEmailAndPassword(obj.email, obj.password)
+        .then(function(response) {
+            return callback('Signed in successfully.')
+        })
+        .catch(function(error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            return callback( errorMessage )
+        });
+}
+
+exports.newAuthenticateUser = function(obj, callback) {
+    return firebase.auth().createUserWithEmailAndPassword(obj.email, obj.password)
+        .then(function(response) {
+            return callback('Signup successful.')
+        })
+        .catch(function(error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            return callback( errorMessage )
+        });
+}
+
+exports.currentUserDetails = function(callback) {
+    return callback(currentUserDetails);
+}
+exports.signOutUser = function(callback) {
+    firebase.auth().signOut()
+        .then(function(response) {
+            return callback('Signed out successfully');
+        }).catch(function(err){
+            return callback('Couldnt sign out. Try again.');
+        });
 }

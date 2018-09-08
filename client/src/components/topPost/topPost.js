@@ -73,7 +73,7 @@ class topPost extends Component{
                                             <span className={classes.headWord1}>Top</span> 
                                             <span className={classes.headWord2}>Post</span>
                                         </h1>
-                                        <Grid>
+                                        <Grid >
                                             <Grid.Row>
                                                 <Grid.Column width={16} className={classes.main}>
                                                 <Slider {...settings} ref={node => this.carousel = node } >
@@ -81,25 +81,27 @@ class topPost extends Component{
                                                             Object.keys(store.posts).map((item, i) => {
                                                                 const val = store.posts[item];
                                                                 return <div>
-                                                                    <div style={{ 'background-color': 'rgb(246, 247, 251)'}}>
+                                                                    <div>
                                                                         <Image style={{'max-height': '500px'}} centered src={val.imgList} />
                                                                     </div>
-                                                                    <div className={classes.center} >
-                                                                        <Link to={{ pathname: this.props.match.url  +'post', search : '?id=' + val.id }}><h1>{val.title}</h1></Link>
-                                                                        <span>
-                                                                        { moment.unix(parseInt(val.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a") !== 'Invalid date'
-                                                                            ? moment.unix(parseInt(val.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a")
-                                                                            : ''
-                                                                        } 
-                                                                        </span>
+                                                                    <div  style={{ 'padding': '5vh 5vw' }}>
+                                                                        <div className={classes.center} >
+                                                                            <Link to={{ pathname: this.props.match.url  +'post', search : '?id=' + val.id }}><h1>{val.title}</h1></Link>
+                                                                            <span>
+                                                                            { moment.unix(parseInt(val.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a") !== 'Invalid date'
+                                                                                ? moment.unix(parseInt(val.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a")
+                                                                                : ''
+                                                                            } 
+                                                                            </span>
+                                                                        </div>
+                
+                                                                        <div className={classes.content}>
+                                                                            <p>{ ReactHtmlParser(val.content) }</p>
+                                                                        </div>
+                                                                        <h3>Comments</h3>
+                                                                        <CommentHandler post={val} updateComment={this.updatePage} /> 
+                                                                        
                                                                     </div>
-            
-                                                                    <div className={classes.content}>
-                                                                        <p>{ ReactHtmlParser(val.content) }</p>
-                                                                    </div>
-                                                                    <h3>Comments</h3>
-                                                                    <CommentHandler post={val} updateComment={this.updatePage} /> 
-                                                                    
                                                                 </div>
                                                             })
                                                         }
@@ -114,7 +116,9 @@ class topPost extends Component{
                                     </Grid.Column>
                                     <Grid.Column width={4}>
                                         <div style={{'height': '100%', 'background-color': 'rgb(246, 247, 251)'}}>
-                                            
+                                            <Image style={{'max-height': '500px'}} centered src='https://i.pinimg.com/736x/a9/d6/54/a9d654bf6c1c80f95ee13e47a475e6f0.jpg' />
+                                            <Image style={{'max-height': '500px'}} centered src='https://i.pinimg.com/736x/a9/d6/54/a9d654bf6c1c80f95ee13e47a475e6f0.jpg' />
+                                            <Image style={{'max-height': '500px'}} centered src='https://i.pinimg.com/736x/a9/d6/54/a9d654bf6c1c80f95ee13e47a475e6f0.jpg' />
                                         </div>
                                         
                                     </Grid.Column>
