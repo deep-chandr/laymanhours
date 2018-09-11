@@ -5,6 +5,7 @@ import IndivisualPost from './indivisualPost/indivisualPost';
 import Main from './main/main';
 import AddNewPost from './addNewPost/addNewPost';
 import SignIn from './authFile/signIn';
+import UserProfile from './UserProfile/UserProfile';
 
 
 class Routes extends Component{
@@ -19,6 +20,9 @@ class Routes extends Component{
             <Route path='/signin'
                 exact
                 component={SignIn} />
+            <Route path='/profile'
+                exact
+                component={UserProfile} />
             <Route path='/'
                 exact
                 component={Main} />

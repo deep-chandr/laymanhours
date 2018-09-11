@@ -32,7 +32,6 @@ class topPost extends Component{
         getTopPostData()
             .then(res => {
                 store.posts = res.data;
-                this.forceUpdate();
             })
             .catch(err => NotifyMe('error', JSON.stringify(err)))
     }
@@ -77,36 +76,34 @@ class topPost extends Component{
                                             <Grid.Row>
                                                 <Grid.Column width={16} className={classes.main}>
                                                 <Slider {...settings} ref={node => this.carousel = node } >
-                                                        {
-                                                            Object.keys(store.posts).map((item, i) => {
-                                                                const val = store.posts[item];
-                                                                return <div>
-                                                                    <div>
-                                                                        <Image style={{'max-height': '500px'}} centered src={val.imgList} />
-                                                                    </div>
-                                                                    <div  style={{ 'padding': '5vh 5vw' }}>
-                                                                        <div className={classes.center} >
-                                                                            <Link to={{ pathname: this.props.match.url  +'post', search : '?id=' + val.id }}><h1>{val.title}</h1></Link>
-                                                                            <span>
-                                                                            { moment.unix(parseInt(val.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a") !== 'Invalid date'
-                                                                                ? moment.unix(parseInt(val.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a")
-                                                                                : ''
-                                                                            } 
-                                                                            </span>
-                                                                        </div>
-                
-                                                                        <div className={classes.content}>
-                                                                            <p>{ ReactHtmlParser(val.content) }</p>
-                                                                        </div>
-                                                                        <h3>Comments</h3>
-                                                                        <CommentHandler post={val} updateComment={this.updatePage} /> 
-                                                                        
-                                                                    </div>
+                                                    {
+                                                        Object.keys(store.posts).map((item, i) => {
+                                                            const val = store.posts[item];
+                                                            return <div>
+                                                                <div>
+                                                                    <Image style={{'max-height': '500px'}} centered src={val.imgList} />
                                                                 </div>
-                                                            })
-                                                        }
-                                                    
-
+                                                                <div  style={{ 'padding': '5vh 5vw' }}>
+                                                                    <div className={classes.center} >
+                                                                        <Link to={{ pathname: this.props.location.pathname  +'post', search : '?id=' + val.id }}><h1>{val.title}</h1></Link>
+                                                                        <span>
+                                                                        { moment.unix(parseInt(val.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a") !== 'Invalid date'
+                                                                            ? moment.unix(parseInt(val.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a")
+                                                                            : ''
+                                                                        } 
+                                                                        </span>
+                                                                    </div>
+            
+                                                                    <div className={classes.content}>
+                                                                        <p>{ ReactHtmlParser(val.content) }</p>
+                                                                    </div>
+                                                                    <h3>Comments</h3>
+                                                                    <CommentHandler post={val} updateComment={this.updatePage} /> 
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        })
+                                                    }
                                                         
                                                 </Slider>
                                                     
@@ -138,4 +135,4 @@ class topPost extends Component{
     }
 }
 
-export default inject('mainStore')(observer(withRouter(topPost)));
+export default inject('mainStore')(withRouter(observer(topPost)));

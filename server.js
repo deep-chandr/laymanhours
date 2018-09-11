@@ -5,6 +5,7 @@ var path = require('path');
 var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var session = require('express-session');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -23,6 +24,8 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 })); 
 app.use(cookieParser());
+app.use(session({secret: "Shh, its a secret!"}));
+// app.disable('etag');
 
 
 app.use('/', routes);

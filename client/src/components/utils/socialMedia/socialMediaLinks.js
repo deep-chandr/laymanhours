@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import classes from './socialMediaLinks.css';
 import { SocialIcon } from 'react-social-icons';
 
 class socialMediaLinks extends Component{

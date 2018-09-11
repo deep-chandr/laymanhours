@@ -12,6 +12,13 @@ router.get('/test', (req, res) => {
 });
   
 router.get('/toppost', (req, res) => {
+    // if(req.session.page_views){
+    //     req.session.page_views++;
+    //     res.send("You visited this page " + req.session.page_views + " times");
+    //  } else {
+    //     req.session.page_views = 1;
+    //     res.send("Welcome to this page for the first time!");
+    //  }
     dbfunc.fetchPosts(function(allPosts){
         res.send(allPosts);
     });
@@ -90,6 +97,24 @@ router.post('/newauthenticateuser', (req, res) => {
     }
     
 });
-
+router.post('/createuserprofile', (req, res) => {
+    var obj = req.body;
+    dbfunc.createUserProfile(obj, function(data){
+        res.send(data);
+    })
+    
+});
+router.post('/fetchprofiledata', (req, res) => {
+    var obj = req.body;
+    dbfunc.fetchUserProfile(obj, function(data){
+        res.send(data);
+    })
+});
+router.post('/updateuserprofiledata', (req, res) => {
+    var obj = req.body;
+    dbfunc.updateUserpProfileData(obj, function(data){
+        res.send(data);
+    })
+});
 
 module.exports = router;
