@@ -45,14 +45,14 @@ class Navigation extends Component{
         this.setState({
             navItems:[
                 {'name': 'Sign In', 'route' : '/signin'},
+                {'name': 'Profile', 'route' : '/profile'},
                 {'name': 'home', 'route' : '/'}, 
                 {'name': 'A History Of Layman Hours-All Post', 'route' : '/post'}, 
                 {'name': 'About Us', 'route' : '/'}, 
                 {'name': 'Contact Page', 'route' : '/'}, 
                 {'name': 'Privacy Policy', 'route' : '/'}, 
                 {'name': 'Media', 'route' : '/'}, 
-                {'name': 'Add New Post', 'route' : '/addnewpost'},
-                {'name': 'Sign In', 'route' : '/signin'}
+                {'name': 'Add New Post', 'route' : '/addnewpost'}
             ]
         })
     }

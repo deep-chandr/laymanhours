@@ -19,6 +19,8 @@ export const getAuthorDetails = (authorName) => {
     return callAPI('get', '/api/authordetails/' + authorName);
 }
 
+
+
 export const addNewPost = (data) => {
     return callAPI('post', '/api/addpost', data);
 }
@@ -34,6 +36,16 @@ export const authenticateUser = (data) => {
 export const newAuthenticateUser = (data) => {
     return callAPI('post', '/api/newauthenticateuser', data);
 }
+export const createNewUserProfile = (data) => {
+    return callAPI('post', '/api/createuserprofile', data);
+}
+export const fetchprofiledata = (data) => {
+    return callAPI('post', '/api/fetchprofiledata', data);
+}
+export const updateuserprofiledata = (data) => {
+    return callAPI('post', '/api/updateuserprofiledata', data);
+}
+
 
 
 export const currentUserDetails = (data) => {

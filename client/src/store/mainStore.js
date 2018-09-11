@@ -4,7 +4,8 @@ import {extendObservable} from 'mobx';
 class MainStore {
     constructor() {
         extendObservable(this, {
-            posts: []
+            posts: [],
+            currentUser : {}
             // count: 1,
             // tableList: [],
             // collectionTableList: [],
