@@ -9,6 +9,8 @@ import { NotifyMe } from '../utils/notifyMe';
 import { Grid, Image } from 'semantic-ui-react';
 import SocialMediaLinks from '../utils/socialMedia/socialMediaLinks';
 import moment from 'moment';
+import MediaQuery from 'react-responsive';
+import CommentHandler from '../utils/commentHandler/commentHandler';
 
 class IndivisualPost extends Component{
     state = {
@@ -49,7 +51,7 @@ class IndivisualPost extends Component{
                     authorDetails : res.data
                 })
             })
-            .catch(err => NotifyMe('error', JSON.stringify(err)))
+            .catch(err => NotifyMe('error', JSON.stringify(err.message)))
     }
 
     getPosts = () => {
@@ -62,42 +64,96 @@ class IndivisualPost extends Component{
             })
             .catch(err => NotifyMe('error', JSON.stringify(err)))
     }
+    updatePage =() => {
+        NotifyMe('success', 'imcalled')
+        this.getPosts();
+    }
     render(){
-        console.log(this.state.currentPost)
         const currentPost = this.state.currentPost;
         return <MyContainer>
-            
-            <Grid style={{ 'margin-top': '15px' }}>
-                <Grid.Row>
-                    <Grid.Column width={11}>
-                    <div>
-                        <img alt='' src={currentPost.imgList} style={{'width': '100%'}} />
-                        {/* <p>{currentPost.content}</p> */}
-                        <h1 className={classes.mainHeading}>{currentPost.title}</h1>
-                        <h3 className={classes.mainHeading}>
-                            { moment.unix(parseInt(currentPost.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a") !== 'Invalid date'
-                                ? moment.unix(parseInt(currentPost.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a")
-                                : ''
-                            }  
-                            |  {currentPost.description}
-                        </h3>
-                        
-                        <p className={classes.content}>{this.state.demoContent}</p>
-                    </div>
-                    <div className={classes.postFeedback}></div>
-
-                    </Grid.Column>
-                    <Grid.Column width={5}>
-                        <div className={classes.authorWrapper}>
-                            <Image src={imgsmp} width='100%' / >
-                            {
-                                Object.keys(this.state.authorDetails).length && 
-                                <SocialMediaLinks details={this.state.authorDetails} />
-                            }
+            <MediaQuery minWidth={1224}>
+                <Grid style={{ 'margin-top': '15px' }}>
+                    <Grid.Row>
+                        <Grid.Column width={11}>
+                        <div>
+                            <img alt='' src={currentPost.imgList} style={{'width': '100%'}} />
+                            {/* <p>{currentPost.content}</p> */}
+                            <h1 className={classes.mainHeading}>{currentPost.title}</h1>
+                            <h3 className={classes.mainHeading}>
+                                { moment.unix(parseInt(currentPost.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a") !== 'Invalid date'
+                                    ? moment.unix(parseInt(currentPost.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a")
+                                    : ''
+                                }  
+                                |  {currentPost.description}
+                            </h3>
+                            
+                            <p className={classes.content}>{this.state.demoContent}</p>
                         </div>
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>
+                        <h3>Comments</h3>
+                        <CommentHandler post={currentPost} updateComment={this.updatePage} /> 
+
+                        </Grid.Column>
+                        <Grid.Column width={5}>
+                            
+                            <div className={classes.authorWrapper}>
+                                <div style={{  'height': '100px', 'margin-bottom': '50px'}}>
+                                    Advertisement
+                                </div>
+                                <Image src={imgsmp} width='100%' / >
+                                {/* {
+                                    Object.keys(this.state.authorDetails).length && 
+                                    <SocialMediaLinks details={this.state.authorDetails} />
+                                } */}
+                                {
+                                    Object.keys(this.state.authorDetails).length 
+                                        ? Object.keys(this.state.authorDetails).map(val => <div>
+                                            <span>{val}:</span>
+                                            <span>{this.state.authorDetails[val]}</span>
+                                        </div>)
+                                        : <p>Author details couldn't be fetched.</p>
+                                }
+                            </div>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            </MediaQuery>
+            
+            <MediaQuery maxWidth={1224}>
+                <Grid style={{ 'margin-top': '15px' }}>
+                    <Grid.Row>
+                        <Grid.Column width={16}>
+                            <div>
+                                <img alt='' src={currentPost.imgList} style={{'width': '100%'}} />
+                                {/* <p>{currentPost.content}</p> */}
+                                <h1 className={classes.mainHeading}>{currentPost.title}</h1>
+                                <h3 className={classes.mainHeading}>
+                                    { moment.unix(parseInt(currentPost.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a") !== 'Invalid date'
+                                        ? moment.unix(parseInt(currentPost.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a")
+                                        : ''
+                                    }  
+                                    |  {currentPost.description}
+                                </h3>
+                                
+                                <p className={classes.content}>{this.state.demoContent}</p>
+                            </div>
+                            <div className={classes.postFeedback}></div>
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Column width={16}>
+                            <div className={classes.authorWrapper}>
+                                <Image src={imgsmp} width='100%' / >
+                                {
+                                    Object.keys(this.state.authorDetails).length && 
+                                    <SocialMediaLinks details={this.state.authorDetails} />
+                                }
+                            </div>
+                        </Grid.Column>
+
+                    </Grid.Row>
+                </Grid>
+            </MediaQuery>
+
         </MyContainer>;
     }
 }

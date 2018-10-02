@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 })); 
 app.use(cookieParser());
 app.use(session({secret: "Shh, its a secret!"}));
-// app.disable('etag');
+app.disable('etag');
 
 
 app.use('/', routes);

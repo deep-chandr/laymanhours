@@ -1,21 +1,13 @@
 .wrapper{
     background-image: url("https://wallpapercave.com/wp/sU4PDPQ.jpg");
-
     height: 100%; 
-
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 
 }
 
-.wrapperStyle{
-    margin: 0 20%;
-}
-
 .wrapperCard{
-    margin : 20px 5%;
-    padding : 10px;
     height : 90vh;
     display: flex;
     justify-content: center;

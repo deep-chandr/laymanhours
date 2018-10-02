@@ -14,7 +14,6 @@ class InputComponent extends Component{
 
     onChangeEditor(dataKey, event, editor){
         const data = editor.getData();
-        // console.log( { dataKey, event, editor, data  } );
         this.setState({
             inputFields : {
                 ...this.state.inputFields,

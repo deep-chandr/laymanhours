@@ -5,6 +5,7 @@ class socialMediaLinks extends Component{
     render(){
         return <div style={{ 'text-align': 'center', 'margin': '15px 0'}}>
             {
+                this.props.details.socialmedialinks && 
                 this.props.details.socialmedialinks.map((val, id) => {
                     return <span style={{ 'padding': '5px' }}> 
                         <SocialIcon 

@@ -9,7 +9,7 @@ class Main extends Component {
         return (
             <div>
                 <TopPost />
-                <FeaturedPost />
+                {/* <FeaturedPost /> */}
                 {/* <div style={{ 'width': '90%', 'margin': '0 auto' }}>
                     <MasonaryContainer />
                 </div> */}

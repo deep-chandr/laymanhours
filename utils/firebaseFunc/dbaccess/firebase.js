@@ -12,26 +12,25 @@ const database = firebase.database();
 
 
 
-var currentUserDetails = null;
-firebase.auth().onAuthStateChanged(function(user) {
+// var signedInUserDetails = null;
+const signedInUserDetails = function(){
+
+    var user = firebase.auth().currentUser;
     if (user) {
-      // User is signed in.
-      currentUserDetails = {};
-      currentUserDetails.displayName = user.displayName;
-      currentUserDetails.email = user.email;
-      currentUserDetails.age = user.age;
-      currentUserDetails.gender = user.gender;
-      currentUserDetails.about = user.about;
-      currentUserDetails.emailVerified = user.emailVerified;
-      currentUserDetails.photoURL = user.photoURL;
-      currentUserDetails.isAnonymous = user.isAnonymous;
-      currentUserDetails.uid = user.uid;
-      currentUserDetails.providerData = user.providerData;
+    // User is signed in.
+        return user;
     } else {
-        currentUserDetails = null;
-        // User is signed out.
+    // No user is signed in.
+        return null
     }
-});
+    // return firebase.auth().currentUser(function(user) {
+    //     if (user) {
+    //         return user;
+    //     }else{
+    //         return 0
+    //     }
+    // });
+}
 exports.saveNewPost = function(obj, callback) {
     return database.ref('allpost/' + obj.datetime).set(obj, function(error) {
         if (error) {
@@ -41,21 +40,11 @@ exports.saveNewPost = function(obj, callback) {
         }
     });
 }
-exports.saveNewAuthor = function(obj, callback) {
-    return database.ref('allauthors/' + obj.name).set(obj, function(error) {
-        if (error) {
-          return callback('Error occured. Retry.')
-        } else {
-          return callback('Author saved to db : ' + obj.name)
-        }
-    });
-}
 
 exports.fetchPosts = function(callback) {
     return firebase.database().ref('/allpost').once('value',
         function(snapshot) {
             return callback(snapshot.val())
-            // return callback('hello')
         },
         function(err) {
             return callback('Error fetching data , try again.')
@@ -63,8 +52,8 @@ exports.fetchPosts = function(callback) {
     );
 }
 
-exports.fetchAuthor = function(authorName, callback) {
-    return firebase.database().ref('/allauthors/' + authorName).once('value',
+exports.fetchAuthor = function(authorEmail, callback) {
+    return firebase.database().ref('/allusers/' + authorEmail).once('value',
         function(snapshot) {
             return callback(snapshot.val())
         },
@@ -130,9 +119,21 @@ exports.saveComment = function(postid, obj, callback) {
 exports.authenticateUser = function(obj, callback) {
     return firebase.auth().signInWithEmailAndPassword(obj.email, obj.password)
         .then(function(response) {
-            return callback({
-                result : 'success'
-            })
+            return firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                  // User is signed in.
+                  return callback({
+                    result : 'success',
+                    content : user
+                  })
+                } else {
+                  // No user is signed in.
+                  return callback({
+                    result : 'error',
+                    message : 'No user signed in'
+                  })
+                }
+            });
         })
         .catch(function(error) {
             var errorCode = error.code;
@@ -147,10 +148,21 @@ exports.authenticateUser = function(obj, callback) {
 exports.newAuthenticateUser = function(obj, callback) {
     return firebase.auth().createUserWithEmailAndPassword(obj.email, obj.password)
         .then(function(response) {
-            return callback({
-                result: 'success',
-                content : 'Signup successful.'
-            })
+            return firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                  // User is signed in.
+                  return callback({
+                    result : 'success',
+                    content : user
+                  })
+                } else {
+                  // No user is signed in.
+                  return callback({
+                    result : 'error',
+                    message : 'No user signed in'
+                  })
+                }
+            });
         })
         .catch(function(error) {
             var errorCode = error.code;
@@ -163,10 +175,32 @@ exports.newAuthenticateUser = function(obj, callback) {
 }
 
 exports.currentUserDetails = function(callback) {
-    return callback(currentUserDetails);
+    const userdetail = signedInUserDetails();
+    if(userdetail){
+        return firebase.database().ref('/allusers/' + userdetail.email.replace(/\./g, ",")).once('value',
+            function(snapshot) {
+                return callback({
+                    result : 'success',
+                    content : snapshot.val()
+                })
+            },
+            function(err) {
+                return callback({
+                    result : "success",
+                    content : 'Error fetching data of user'
+                })
+            }
+        );
+    }else{
+        return callback({
+            result : 'error',
+            message : 'No user signed in.'
+        })
+    }
 }
+    
 exports.signOutUser = function(callback) {
-    firebase.auth().signOut()
+    return firebase.auth().signOut()
         .then(function(response) {
             return callback('Signed out successfully');
         }).catch(function(err){
@@ -185,7 +219,6 @@ exports.createUserProfile = function(obj, callback) {
 exports.fetchUserProfile = function(obj, callback) {
     return firebase.database().ref('/allusers/'+ obj.email.replace('.',',') ).once('value',
         function(snapshot) {
-            console.log('current user profile--------', snapshot.val())
             return callback(snapshot.val())
         },
         function(err) {
@@ -195,7 +228,8 @@ exports.fetchUserProfile = function(obj, callback) {
 }
 exports.updateUserpProfileData = function(obj, callback) {
     var updates = {};
-    updates['/allusers/' + obj.email.replace('.',',') ] = obj;
+    updates['/allusers/' + obj.email.replace(/\./g,',') ] = obj;
+
     return database.ref().update(updates,  
         function(error) {
             if (error) {

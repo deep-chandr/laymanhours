@@ -15,17 +15,15 @@ export const getApiTestData = () => {
 export const getTopPostData = () => {
     return callAPI('get', '/api/toppost');
 }
-export const getAuthorDetails = (authorName) => {
-    return callAPI('get', '/api/authordetails/' + authorName);
+export const getAuthorDetails = (authorEmail) => {
+    const authEmail= authorEmail.replace( /\./g ,",");
+    return callAPI('get', '/api/authordetails/' + authEmail);
 }
 
 
 
 export const addNewPost = (data) => {
     return callAPI('post', '/api/addpost', data);
-}
-export const addNewAuthor = (data) => {
-    return callAPI('post', '/api/addauthor', data);
 }
 export const addComment = (data) => {
     return callAPI('post', '/api/addcomment', data);
@@ -48,9 +46,9 @@ export const updateuserprofiledata = (data) => {
 
 
 
-export const currentUserDetails = (data) => {
-    return callAPI('get', '/api/currentuserdetails', data);
+export const currentUserDetails = () => {
+    return callAPI('get', '/api/currentuserdetails');
 }
-export const signoutuser = (data) => {
-    return callAPI('get', '/api/signoutuser', data);
+export const signoutuser = () => {
+    return callAPI('get', '/api/signoutuser');
 }

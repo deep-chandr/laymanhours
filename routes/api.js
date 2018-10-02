@@ -24,7 +24,9 @@ router.get('/toppost', (req, res) => {
     });
 });
 router.get('/authordetails/:id', (req, res) => {
-    dbfunc.fetchAuthor(req.params.id, function(author){
+    // const authorEmail = req.params.id.replace( /,/g ,".");
+    // console.log('authemail: ',authorEmail);
+    dbfunc.fetchAuthor( req.params.id , function(author){
         res.send(author);
     });
 });
@@ -52,15 +54,6 @@ router.post('/addpost', (req, res) => {
     obj['datetime'] = new Date().getTime();
     obj['id'] = obj['datetime'];
     dbfunc.saveNewPost(obj, function(data){
-        res.send(data);
-    })
-});
-
-router.post('/addauthor', (req, res) => {
-    var obj = req.body;
-    // obj['datetime'] = new Date().getTime();
-    // obj['id'] = obj['datetime'];
-    dbfunc.saveNewAuthor(obj, function(data){
         res.send(data);
     })
 });

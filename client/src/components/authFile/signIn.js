@@ -6,6 +6,7 @@ import { authenticateUser, newAuthenticateUser, currentUserDetails, signoutuser,
 import { NotifyMe } from '../utils/notifyMe';
 import { inject, observer } from 'mobx-react';
 import withRouter from 'react-router-dom/withRouter';
+import { myCurrentUserDetails } from '../utils/utilityFunctions';
 
 const input_fields_for_signin_signup =  [
     {'name': 'Email', 'key': 'email', 'type': 'stringtype', 'not-empty': true},
@@ -19,14 +20,13 @@ class SignIn extends Component{
 
     onSubmitFormData = (data) => {
         if(this.state.activeItem === 'signin'){
-
             authenticateUser(data)
                 .then(response => {
                     if(response.data.result === 'success'){
-                        this.fetchCurrentUserDetails('signin');
-                        NotifyMe('success', JSON.stringify(response.data.content));
+                        this.props.mainStore.currentUser = response.data.content;
+                        NotifyMe('success', JSON.stringify(response.data));
+                        this.props.history.push('/profile')
                     }else{
-                        console.log('==', response.data.message)
                         NotifyMe('error', JSON.stringify(response.data.message));
                     }
                 })
@@ -34,11 +34,10 @@ class SignIn extends Component{
                     NotifyMe('error', JSON.stringify(err));
                 })
         }else if(this.state.activeItem === 'signup'){
-
             newAuthenticateUser(data)
                 .then(response => {
                     if(response.data.result === 'success'){
-                        this.fetchCurrentUserDetails('signup');
+                        this.props.mainStore.currentUser = response.data.content;
                         NotifyMe('success', JSON.stringify(response.data));
                     }else{
                         NotifyMe('error', JSON.stringify(response.data));
@@ -49,47 +48,43 @@ class SignIn extends Component{
                 })
         }
     }
-    createUserProfile = () => {
-        const email = this.props.mainStore.currentUser.email;
-        createNewUserProfile({email : email })
-            .then(response => {
-                NotifyMe('success', JSON.stringify(response))
-            })
-            .catch(err => {
-                NotifyMe('error', JSON.stringify(err.data));
-            })
-    }
-    fetchProfileData = () => {
-        const email = this.props.mainStore.currentUser.email;
-        fetchprofiledata({email : email })
-            .then(response => {
-                let obj = {
-                    ...this.props.mainStore.currentUser,
-                    ...response.data
-                }
-                this.props.mainStore.currentUser = obj;
-                NotifyMe('success', JSON.stringify(response.data))
-            })
-            .catch(err => {
-                NotifyMe('error', JSON.stringify(err.data));
-            })
-    }
-    fetchCurrentUserDetails = (job) => {
+    // createUserProfile = () => {
+    //     const email = this.props.mainStore.currentUser.email;
+    //     createNewUserProfile({email : email })
+    //         .then(response => {
+    //             NotifyMe('success', JSON.stringify(response))
+    //         })
+    //         .catch(err => {
+    //             NotifyMe('error', JSON.stringify(err.data));
+    //         })
+    // }
+    // fetchProfileData = () => {
+    //     const email = this.props.mainStore.currentUser.email;
+    //     fetchprofiledata({email : email })
+    //         .then(response => {
+    //             let obj = {
+    //                 ...this.props.mainStore.currentUser,
+    //                 ...response.data
+    //             }
+    //             this.props.mainStore.currentUser = obj;
+    //             NotifyMe('success', JSON.stringify(response.data))
+    //         })
+    //         .catch(err => {
+    //             NotifyMe('error', JSON.stringify(err.data));
+    //         })
+    // }
+    fetchCurrentUserDetails = () => {
         currentUserDetails()
             .then(response => {
-                this.props.mainStore.currentUser = response.data;
-                if(job === 'signin'){
-                    this.fetchProfileData();
-                }else if(job === 'signup'){
-                    this.createUserProfile();
+                if(response.data.result === 'success'){
+                    this.props.mainStore.currentUser = response.data;
+                    NotifyMe('success', JSON.stringify(response.data.content));
+                }else{
+                    NotifyMe('error', response.data.message);
                 }
-                NotifyMe('success', JSON.stringify(response.data));
-                this.props.history.push({
-                    pathname : '/profile'
-                })
             })
             .catch(err => {
-                NotifyMe('error', JSON.stringify(err.data));
+                NotifyMe('error', JSON.stringify(err));
             })
     }
     signout = () => {
