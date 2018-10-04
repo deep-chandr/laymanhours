@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import { Comment } from 'semantic-ui-react';
 import InputComponent from '../inputComponent';
 import { NotifyMe } from '../notifyMe';
-import { addComment } from '../apiCall';
+import { addComment, currentUserDetails } from '../apiCall';
 import moment from 'moment';
+import { isObjEmpty } from '../utilityFunctions';
 
 const commentFormData = [
     {'name': 'Name', 'key': 'name', 'type': 'stringtype', 'not-empty': true},
@@ -13,7 +14,8 @@ const commentFormData = [
 
 class CommentHandler extends Component{
     state = {
-        replyformstatus : false
+        replyformstatus : false,
+        currentUser : {}
     }
     submitHandler = (data) => {
         data['postid'] = this.props.post.id;
@@ -26,30 +28,34 @@ class CommentHandler extends Component{
                 NotifyMe('error', JSON.stringify(err));
             })
     }
+    componentDidMount(){
+        this.checkLoginStatus();
+    }
+    checkLoginStatus = () => {
+        currentUserDetails()
+            .then(response => {
+                if(response.data.result === 'success'){
+                    this.setState({
+                        currentUser : response.data.content
+                    })
+                }else{
+                    this.setState({ currentUser : {} })
+                }
+            })
+            .catch(err => {
+                NotifyMe('error', JSON.stringify(err));
+            })
+    }
     onReply = () => {
-        // this.setState({
-        //     replyformstatus : !this.state.replyformstatus
-        // })
     }
     render(){
 
-        // const replyform = <InputComponent 
-        //     data={commentFormData}
-        //     click = {this.submitHandler} />
+        console.log('current user:  ', this.state.currentUser)
 
-        const comments = this.props.post.comments;
-        if(!comments){
-            return <div>
-                <p>Be the first one to comment!</p>
-                <InputComponent 
-                    data={commentFormData}
-                    click = {this.submitHandler} />
-            </div>
-        }else{
-            return <div>
-            {/* <p>{JSON.stringify(comments)}</p> */}
+        return <div>
             <Comment.Group>
-                {
+                {   
+                    !isObjEmpty(comments) &&
                     Object.keys(comments).map((val, id) => {
                         var comment = comments[val];
                         return <Comment>
@@ -72,13 +78,34 @@ class CommentHandler extends Component{
                         </Comment>
                     })
                 }
-                <h3>Your comment</h3>
+                {   
+                    isObjEmpty(this.state.currentUser) 
+                    ? <div>
+                        <h5>Please sign in to comment.</h5>
+                    </div>
+                    : <div>
+                        <h3>Your comment</h3>
+                        <InputComponent 
+                            data={commentFormData}
+                            click = {this.submitHandler} />
+                    </div> 
+                }
+                
+                
+            </Comment.Group>
+        </div>
+
+
+        const comments = this.props.post.comments;
+        if(!comments){
+            return <div>
+                <p>Be the first one to comment!</p>
                 <InputComponent 
                     data={commentFormData}
                     click = {this.submitHandler} />
-            </Comment.Group>
-
-        </div>
+            </div>
+        }else{
+            
         }
     }
 }

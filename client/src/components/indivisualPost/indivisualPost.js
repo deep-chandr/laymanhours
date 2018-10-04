@@ -96,10 +96,13 @@ class IndivisualPost extends Component{
                         <Grid.Column width={5}>
                             
                             <div className={classes.authorWrapper}>
-                                <div style={{  'height': '100px', 'margin-bottom': '50px'}}>
+                                <div style={{  'height': '100px', 'margin-bottom': '50px', 'background-color': 'grey'}}>
                                     Advertisement
                                 </div>
-                                <Image src={imgsmp} width='100%' / >
+                                <div style={{ 'background-color': 'grey' }}>
+                                    <Image circular src={imgsmp} width='100%' / >
+                                </div>
+                                
                                 {/* {
                                     Object.keys(this.state.authorDetails).length && 
                                     <SocialMediaLinks details={this.state.authorDetails} />

@@ -4,12 +4,11 @@ import classes from './UserProfile.css';
 import { inject, observer } from 'mobx-react';
 import withRouter from 'react-router-dom/withRouter';
 import InputComponent from '../utils/inputComponent';
-import { updateuserprofiledata, getAuthorDetails, currentUserDetails } from '../utils/apiCall';
+import { updateuserprofiledata, currentUserDetails } from '../utils/apiCall';
 import { NotifyMe } from '../utils/notifyMe';
 import MyContainer from '../hoc/myContainer';
 import MediaQuery from 'react-responsive';
 import profile from '../profile.jpg';
-import { myCurrentUserDetails } from '../utils/utilityFunctions';
 
 const enter_profile_details = [
     {'name': 'Display Name', 'key': 'dname', 'type': 'stringtype', 'not-empty': true},
@@ -21,7 +20,6 @@ const enter_profile_details = [
     {'name': 'Profession', 'key': 'profession', 'type': 'stringtype', 'not-empty': true}
 ];
 
-const infoToDisplay = ['name', 'email', 'age']
 class UserProfile extends Component{
     state = {
         editMode: false,
@@ -34,8 +32,6 @@ class UserProfile extends Component{
         currentUserDetails()
             .then(response => {
                 if(response.data.result === 'success'){
-                    this.props.mainStore.currentUser = response.data;
-                    // NotifyMe('success', JSON.stringify(response.data.content));
                     this.setState({
                         currentUser : response.data.content
                     })

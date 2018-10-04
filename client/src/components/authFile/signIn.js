@@ -23,7 +23,6 @@ class SignIn extends Component{
             authenticateUser(data)
                 .then(response => {
                     if(response.data.result === 'success'){
-                        this.props.mainStore.currentUser = response.data.content;
                         NotifyMe('success', JSON.stringify(response.data));
                         this.props.history.push('/profile')
                     }else{
@@ -37,7 +36,6 @@ class SignIn extends Component{
             newAuthenticateUser(data)
                 .then(response => {
                     if(response.data.result === 'success'){
-                        this.props.mainStore.currentUser = response.data.content;
                         NotifyMe('success', JSON.stringify(response.data));
                     }else{
                         NotifyMe('error', JSON.stringify(response.data));
@@ -48,36 +46,11 @@ class SignIn extends Component{
                 })
         }
     }
-    // createUserProfile = () => {
-    //     const email = this.props.mainStore.currentUser.email;
-    //     createNewUserProfile({email : email })
-    //         .then(response => {
-    //             NotifyMe('success', JSON.stringify(response))
-    //         })
-    //         .catch(err => {
-    //             NotifyMe('error', JSON.stringify(err.data));
-    //         })
-    // }
-    // fetchProfileData = () => {
-    //     const email = this.props.mainStore.currentUser.email;
-    //     fetchprofiledata({email : email })
-    //         .then(response => {
-    //             let obj = {
-    //                 ...this.props.mainStore.currentUser,
-    //                 ...response.data
-    //             }
-    //             this.props.mainStore.currentUser = obj;
-    //             NotifyMe('success', JSON.stringify(response.data))
-    //         })
-    //         .catch(err => {
-    //             NotifyMe('error', JSON.stringify(err.data));
-    //         })
-    // }
+
     fetchCurrentUserDetails = () => {
         currentUserDetails()
             .then(response => {
                 if(response.data.result === 'success'){
-                    this.props.mainStore.currentUser = response.data;
                     NotifyMe('success', JSON.stringify(response.data.content));
                 }else{
                     NotifyMe('error', response.data.message);
@@ -90,7 +63,6 @@ class SignIn extends Component{
     signout = () => {
         signoutuser()
                 .then(response => {
-                    this.props.mainStore.currentUser = {};
                     NotifyMe('success', response.data);
                 })
                 .catch(err => {
