@@ -71,7 +71,7 @@ class topPost extends Component{
                                 <Grid>
                                     <Grid.Row>
                                         <Grid.Column width={12} className={classes.main}>
-                                            <h1 className={classes.header} size='huge'>
+                                            <h1 className={classes.header} style={{ 'background-color': 'rgb(250, 250, 250)' }} size='huge'>
                                                 <span className={classes.headWord1}>Top</span> 
                                                 <span className={classes.headWord2}>Post</span>
                                             </h1>
@@ -96,12 +96,11 @@ class topPost extends Component{
                                                                             } 
                                                                             </span>
                                                                         </div>
-                
                                                                         <div className={classes.content} style={{ 'overflow': 'hidden'}}>
-                                                                            <p>{ ReactHtmlParser(val.content) }</p>
+                                                                            <p><i>{val.description}</i></p>
                                                                         </div>
-                                                                        <h3>Comments</h3>
-                                                                        <CommentHandler post={val} updateComment={this.updatePage} /> 
+                                                                        {/* <h3>Comments</h3>
+                                                                        <CommentHandler post={val} updateComment={this.updatePage} />  */}
                                                                         
                                                                     </div>
                                                                 </div>
@@ -172,7 +171,6 @@ class topPost extends Component{
                     </Grid.Row>
                 </Grid>
             </MediaQuery>
-
             
             <MediaQuery maxWidth={1224}>
                 <Grid>
@@ -187,7 +185,7 @@ class topPost extends Component{
                                 <Grid>
                                     <Grid.Row>
                                         <Grid.Column width={16} className={classes.main}>
-                                            <h1 className={classes.header} size='huge'>
+                                            <h1 className={classes.header} size='big'>
                                                 <span className={classes.headWord1}>Top</span> 
                                                 <span className={classes.headWord2}>Post</span>
                                             </h1>

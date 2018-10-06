@@ -7,8 +7,8 @@ import moment from 'moment';
 import { isObjEmpty } from '../utilityFunctions';
 
 const commentFormData = [
-    {'name': 'Name', 'key': 'name', 'type': 'stringtype', 'not-empty': true},
-    {'name': 'Avatar', 'key': 'avatar', 'type': 'stringtype', 'not-empty': true},
+    // {'name': 'Name', 'key': 'name', 'type': 'stringtype', 'not-empty': true},
+    // {'name': 'Avatar', 'key': 'avatar', 'type': 'stringtype', 'not-empty': true},
     {'name': 'Comment', 'key': 'comment', 'type': 'textareaType', 'not-empty': true}
 ];
 
@@ -49,9 +49,7 @@ class CommentHandler extends Component{
     onReply = () => {
     }
     render(){
-
-        console.log('current user:  ', this.state.currentUser)
-
+        const comments = this.props.post.comments;
         return <div>
             <Comment.Group>
                 {   
@@ -94,19 +92,6 @@ class CommentHandler extends Component{
                 
             </Comment.Group>
         </div>
-
-
-        const comments = this.props.post.comments;
-        if(!comments){
-            return <div>
-                <p>Be the first one to comment!</p>
-                <InputComponent 
-                    data={commentFormData}
-                    click = {this.submitHandler} />
-            </div>
-        }else{
-            
-        }
     }
 }
 

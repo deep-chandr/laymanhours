@@ -4,7 +4,7 @@ import classes from './UserProfile.css';
 import { inject, observer } from 'mobx-react';
 import withRouter from 'react-router-dom/withRouter';
 import InputComponent from '../utils/inputComponent';
-import { updateuserprofiledata, currentUserDetails } from '../utils/apiCall';
+import { updateuserprofiledata, currentUserDetails, createNewUserProfile } from '../utils/apiCall';
 import { NotifyMe } from '../utils/notifyMe';
 import MyContainer from '../hoc/myContainer';
 import MediaQuery from 'react-responsive';
@@ -32,6 +32,11 @@ class UserProfile extends Component{
         currentUserDetails()
             .then(response => {
                 if(response.data.result === 'success'){
+                    if(Object.keys(response.data.content).length === 1){
+                        this.setState({
+                            editMode : true
+                        })
+                    }
                     this.setState({
                         currentUser : response.data.content
                     })
@@ -44,20 +49,24 @@ class UserProfile extends Component{
                 NotifyMe('error', JSON.stringify(err));
             })
     }
-    enterEditMode = () => {
+    changeMode = () => {
         this.setState({
             editMode : !this.state.editMode
         })
     }
     onSubmitFormData = (data) => {
-        data['email'] = this.state.currentUser.email;
+        console.log('data :', data)
+        // data['email'] = this.state.currentUser.email;
         updateuserprofiledata(data)
             .then(response => {
                 NotifyMe('success', JSON.stringify(response.data))
+                this.changeMode();
+                this.getProfileData();
             })
             .catch(err => {
                 NotifyMe('error', JSON.stringify(err.data));
             })
+        
     }
     setDefaultValues = (propertyName) => {
         if(propertyName){
@@ -67,7 +76,6 @@ class UserProfile extends Component{
         }
     }
     render(){
-        console.log('user: ', this.state.currentUser)
         return <div className={classes.wrapper}>
             <MyContainer>
                 <MediaQuery minWidth={1224}>
@@ -90,7 +98,7 @@ class UserProfile extends Component{
                                             <div style={{ 'padding' : '100px 20px', 'margin': '1% auto', 'background-color': 'rgba(246, 246, 251, .5)' }}>
                                                 <div style={{ 'text-align' : 'center', 'padding': '15px 0' }}>
                                                     <Button 
-                                                        onClick={this.enterEditMode}>
+                                                        onClick={this.changeMode}>
                                                         {this.state.editMode ? 'Back' : 'Edit'}
                                                     </Button>
                                                 </div>
@@ -141,7 +149,7 @@ class UserProfile extends Component{
                                             <div style={{ 'padding' : '100px 20px', 'margin': '1% auto', 'background-color': 'rgba(246, 246, 251, .5)' }}>
                                                 <div style={{ 'text-align' : 'center', 'padding': '15px 0' }}>
                                                     <Button 
-                                                        onClick={this.enterEditMode}>
+                                                        onClick={this.changeMode}>
                                                         {this.state.editMode ? 'Back' : 'Edit'}
                                                     </Button>
                                                 </div>

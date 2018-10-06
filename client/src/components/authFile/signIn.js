@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import MyContainer from '../hoc/myContainer';
 import { Grid, Menu, Segment, Button } from 'semantic-ui-react';
 import InputComponent from '../utils/inputComponent';
-import { authenticateUser, newAuthenticateUser, currentUserDetails, signoutuser, createNewUserProfile, fetchprofiledata } from '../utils/apiCall';
+import { authenticateUser, newAuthenticateUser, currentUserDetails, signoutuser, createNewUserProfile } from '../utils/apiCall';
 import { NotifyMe } from '../utils/notifyMe';
 import { inject, observer } from 'mobx-react';
 import withRouter from 'react-router-dom/withRouter';
@@ -10,7 +10,7 @@ import { myCurrentUserDetails } from '../utils/utilityFunctions';
 
 const input_fields_for_signin_signup =  [
     {'name': 'Email', 'key': 'email', 'type': 'stringtype', 'not-empty': true},
-    {'name': 'Password', 'key': 'password', 'type': 'stringtype', 'not-empty': true},
+    {'name': 'Password', 'key': 'password', 'type': 'passwordtype', 'not-empty': true},
 ];
 
 class SignIn extends Component{
@@ -36,6 +36,15 @@ class SignIn extends Component{
             newAuthenticateUser(data)
                 .then(response => {
                     if(response.data.result === 'success'){
+                        createNewUserProfile({ email : data.email }).then(response => {
+                            if(response.data.result === 'success'){
+                                this.props.history.push('/profile')
+                                NotifyMe('success',JSON.stringify(response.data.content))
+                            }else{
+                                NotifyMe('success',JSON.stringify(response.data.message))
+                            }
+                        })
+                        
                         NotifyMe('success', JSON.stringify(response.data));
                     }else{
                         NotifyMe('error', JSON.stringify(response.data));

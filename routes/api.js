@@ -1,7 +1,54 @@
+const basic_config = require('../config_backend');
+const utilFunc = require('../utils/utilFunc');
 var express = require('express');
 var router = express.Router();
 const dbfunc = require("../utils/firebaseFunc/dbaccess/firebase");
 const verifyFunc = require('../utils/verificationFunc/verification');
+var jwt = require('jsonwebtoken');
+
+// const sessionChecker = (req, res, next) => {
+//     if (req.session.user && req.cookies.user_sid) {
+//         res.redirect('/profile');
+//     } else {
+//         next();
+//     }    
+// };
+
+const jwtVerification = function(req, res, next){
+    if(!(req.cookies && req.cookies.token)){
+        res.send({   //no token received
+            result : 'error',
+            message : 'No user signed in.'
+        })
+    }else{
+        const token = req.cookies.token;
+        
+        jwt.verify(token, basic_config.session_secret_key, function(err, decodedToken){
+            if(err){   //token received but is invalid
+                res.clearCookie('token');
+                res.send({
+                    result : 'error',
+                    message : 'Please Sign In to continue.'
+                })
+            }else{
+                dbfunc.fetchUserProfile({email : decodedToken.email}, function(data){
+                    if(data.result !== 'success'){
+                        res.clearCookie('token');
+                        res.send({ // credentials in token are invalid
+                            result : 'error',
+                            message : 'Please Sign In to continue.'
+                        })
+                    }else{ //good token
+                        res.locals.userEmail = decodedToken.email;
+                        res.locals.user = data;
+                        next();
+                    }
+                    
+                })
+            }
+        })
+    }
+}
 
 router.get('/', function(req, res) {
     res.send('respond with a resource');
@@ -30,15 +77,17 @@ router.get('/authordetails/:id', (req, res) => {
         res.send(author);
     });
 });
-router.get('/currentuserdetails', (req, res) => {
-    dbfunc.currentUserDetails(function(details){
-        res.send(details);
-    });
+router.get('/currentuserdetails', jwtVerification, (req, res) => {
+    res.send({
+        result : 'success',
+        content : res.locals.user.content
+    })
 });
 router.get('/signoutuser', (req, res) => {
-    dbfunc.signOutUser(function(details){
-        res.send(details);
-    });
+    res.clearCookie('token').send('Signed out successfully');
+    // dbfunc.signOutUser(function(details){
+    //     res.clearCookie('token').send(details);
+    // });
 });
 
 
@@ -57,8 +106,11 @@ router.post('/addpost', (req, res) => {
         res.send(data);
     })
 });
-router.post('/addcomment', (req, res) => {
+router.post('/addcomment', jwtVerification, (req, res) => {
     var obj = req.body;
+    obj.name = res.locals.user.content.dname;
+    obj.avatar = 'https://cdn.pixabay.com/photo/2016/08/20/05/38/avatar-1606916_640.png';
+
     var postid = obj['postid'];
     delete obj['postid'];
 
@@ -74,7 +126,11 @@ router.post('/authenticateuser', (req, res) => {
         res.send('Please enter a valid email.')
     }else{
         dbfunc.authenticateUser(obj, function(data){
-            res.send(data);
+            // if(data.result === 'success'){
+            //     req.session.user = utilFunc.convertDotToComma(data.content.email);
+            // }
+            // console.log(data.token)
+            res.cookie('token', data.token).send(data);
         })
     }
 });
@@ -103,8 +159,9 @@ router.post('/fetchprofiledata', (req, res) => {
         res.send(data);
     })
 });
-router.post('/updateuserprofiledata', (req, res) => {
+router.post('/updateuserprofiledata', jwtVerification, (req, res) => {
     var obj = req.body;
+    obj.email = res.locals.userEmail;
     dbfunc.updateUserpProfileData(obj, function(data){
         res.send(data);
     })
