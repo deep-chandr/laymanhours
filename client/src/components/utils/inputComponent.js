@@ -49,6 +49,20 @@ class InputComponent extends Component{
                             />
                         </Grid.Column>
                     </Grid.Row>
+                }else if(val.type === 'passwordtype'){
+                    return <Grid.Row>
+                        <Grid.Column width={3}>
+                            <p>{val.name}</p>
+                        </Grid.Column>
+                        <Grid.Column width={13}>
+                            <Input 
+                                type = 'password'
+                                onChange={this.onChangeStringType} 
+                                placeholder={val.name} 
+                                name={val.key}
+                            />
+                        </Grid.Column>
+                    </Grid.Row>
                 } else if(val.type === 'editor'){
                     return <Grid.Row>
                         <Grid.Column width={3}>

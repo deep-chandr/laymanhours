@@ -1,3 +1,4 @@
+const basic_config = require('./config_backend');
 const express = require('express');
 var bodyParser = require('body-parser')
 
@@ -13,19 +14,30 @@ const port = process.env.PORT || 5000;
 var routes = require('./routes/index');
 var apis = require('./routes/api');
 
-// // view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
 
+// // Require static assets from public folder
+// app.use(express.static(path.join(_dirname, 'public')));
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 app.use(favicon());
 app.use(logger('dev'));
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 })); 
+
+
+
 app.use(cookieParser());
-app.use(session({secret: "Shh, its a secret!"}));
+
 app.disable('etag');
+
+
+
+
+
 
 
 app.use('/', routes);

@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react';
 import queryString from 'query-string';
 import { getTopPostData, getAuthorDetails } from '../utils/apiCall';
 import { NotifyMe } from '../utils/notifyMe';
-import { Grid, Image } from 'semantic-ui-react';
+import { Grid, Image, Button } from 'semantic-ui-react';
 import SocialMediaLinks from '../utils/socialMedia/socialMediaLinks';
 import moment from 'moment';
 import MediaQuery from 'react-responsive';
@@ -75,31 +75,44 @@ class IndivisualPost extends Component{
                 <Grid style={{ 'margin-top': '15px' }}>
                     <Grid.Row>
                         <Grid.Column width={11}>
-                        <div>
-                            <img alt='' src={currentPost.imgList} style={{'width': '100%'}} />
-                            {/* <p>{currentPost.content}</p> */}
-                            <h1 className={classes.mainHeading}>{currentPost.title}</h1>
-                            <h3 className={classes.mainHeading}>
-                                { moment.unix(parseInt(currentPost.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a") !== 'Invalid date'
-                                    ? moment.unix(parseInt(currentPost.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a")
-                                    : ''
-                                }  
-                                |  {currentPost.description}
-                            </h3>
-                            
-                            <p className={classes.content}>{this.state.demoContent}</p>
-                        </div>
-                        <h3>Comments</h3>
-                        <CommentHandler post={currentPost} updateComment={this.updatePage} /> 
-
+                            <div style={{ 'text-align': 'center' }}>
+                                <Button onClick={() => this.props.history.push('/')} style={{ 'background-color': 'white',  'border-radius': '10%' }}>Back to home</Button>
+                            </div>
+                            <br/>
+                            <div>
+                                <img alt='' src={currentPost.imgList} style={{'width': '100%'}} />
+                                {/* <p>{currentPost.content}</p> */}
+                                <h1 className={classes.mainHeading}>{currentPost.title}</h1>
+                                <h3 className={classes.mainHeading}>
+                                    { moment.unix(parseInt(currentPost.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a") !== 'Invalid date'
+                                        ? moment.unix(parseInt(currentPost.datetime, 10)/1000).format("MMMM Do YYYY, h:mm:ss a")
+                                        : ''
+                                    }  
+                                    |  {currentPost.description}
+                                </h3>
+                                
+                                <p className={classes.content}>{this.state.demoContent}</p>
+                            </div>
+                            <br/>
+                            <div style={{ 'text-align': 'center' }}>
+                                <Button onClick={() => this.props.history.push('/')} style={{ 'background-color': 'white',  'border-radius': '10%' }}>Back to home</Button>
+                            </div>
+                            <h3>Comments</h3>
+                            <CommentHandler post={currentPost} updateComment={this.updatePage} /> 
+                            <br/>
+                            <div style={{ 'text-align': 'center' }}>
+                                <Button onClick={() => this.props.history.push('/')} style={{ 'background-color': 'white',  'border-radius': '10%' }}>Back to home</Button>
+                            </div>
                         </Grid.Column>
                         <Grid.Column width={5}>
-                            
                             <div className={classes.authorWrapper}>
-                                <div style={{  'height': '100px', 'margin-bottom': '50px'}}>
+                                <div style={{  'height': '100px', 'margin-bottom': '50px', 'background-color': 'grey'}}>
                                     Advertisement
                                 </div>
-                                <Image src={imgsmp} width='100%' / >
+                                <div>
+                                    <Image circular src={imgsmp} width='100%' / >
+                                </div>
+                                
                                 {/* {
                                     Object.keys(this.state.authorDetails).length && 
                                     <SocialMediaLinks details={this.state.authorDetails} />
@@ -107,8 +120,8 @@ class IndivisualPost extends Component{
                                 {
                                     Object.keys(this.state.authorDetails).length 
                                         ? Object.keys(this.state.authorDetails).map(val => <div>
-                                            <span>{val}:</span>
-                                            <span>{this.state.authorDetails[val]}</span>
+                                            {/* <span>{val}:</span> */}
+                                            <p style={{ 'text-align': 'center' }}>{this.state.authorDetails[val]}</p>
                                         </div>)
                                         : <p>Author details couldn't be fetched.</p>
                                 }

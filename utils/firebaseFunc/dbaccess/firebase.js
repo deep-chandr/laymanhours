@@ -1,35 +1,35 @@
 var firebase = require("firebase");
-var config = {
-    apiKey: "AIzaSyCZgi2EX3zjsltVWOh1OJYIeYKT8AKPJbk",
-    authDomain: "layman-hours.firebaseapp.com",
-    databaseURL: "https://layman-hours.firebaseio.com",
-    projectId: "layman-hours",
-    storageBucket: "layman-hours.appspot.com",
-    messagingSenderId: "172899416295"
-};
+var jwt = require('jsonwebtoken');
+var basic_config = require('../../../config_backend');
+const bcrypt = require('bcrypt');
+var config = basic_config.firebase_auth;
+const utilFunc = require('../../utilFunc');
+
 firebase.initializeApp(config);
 const database = firebase.database();
 
 
+const getSecretJWTToken = function(obj){
+    return jwt.sign(obj, basic_config.session_secret_key);
+}
+const saltRounds = 10;
+const generatePasswordHash = function(password){
+    var salt = bcrypt.genSaltSync(saltRounds);
+    return bcrypt.hashSync(password, salt);
+}
+const verifyPassword = function(pass, dbpass){
+    return bcrypt.compareSync(pass, dbpass);
+}
+
 
 // var signedInUserDetails = null;
 const signedInUserDetails = function(){
-
     var user = firebase.auth().currentUser;
     if (user) {
-    // User is signed in.
         return user;
     } else {
-    // No user is signed in.
         return null
     }
-    // return firebase.auth().currentUser(function(user) {
-    //     if (user) {
-    //         return user;
-    //     }else{
-    //         return 0
-    //     }
-    // });
 }
 exports.saveNewPost = function(obj, callback) {
     return database.ref('allpost/' + obj.datetime).set(obj, function(error) {
@@ -117,118 +117,144 @@ exports.saveComment = function(postid, obj, callback) {
     );
 }
 exports.authenticateUser = function(obj, callback) {
-    return firebase.auth().signInWithEmailAndPassword(obj.email, obj.password)
-        .then(function(response) {
-            return firebase.auth().onAuthStateChanged(function(user) {
-                if (user) {
-                  // User is signed in.
-                  return callback({
-                    result : 'success',
-                    content : user
-                  })
-                } else {
-                  // No user is signed in.
-                  return callback({
+    // username and password is simply stored in database
+    return firebase.database().ref('auth/' + utilFunc.convertDotToComma(obj.email) )
+        .once('value', function(snapshot) {
+            var username = (snapshot.val() && snapshot.val().email) || 'Anonymous';
+            if(username === 'Anonymous'){
+                return callback({
                     result : 'error',
-                    message : 'No user signed in'
-                  })
+                    message : 'UserId does not exist.'
+                })
+            }else{
+                const passValid = verifyPassword(obj.password, snapshot.val().password)
+                if(!passValid){
+                    return callback({
+                        result : 'error',
+                        message : 'Password does not match.'
+                    })
+                }else{
+                    return callback({
+                        result : 'success',
+                        token : getSecretJWTToken({
+                            email : obj.email
+                        })
+                    })
                 }
-            });
-        })
-        .catch(function(error) {
-            var errorCode = error.code;
-            var errorMessage = error.message;
+            }
+        },
+        function(err) {
             return callback({
-                result : 'error',
-                message : errorMessage
+                result : "error",
+                message : err.message
             })
-        });
+        })
 }
 
 exports.newAuthenticateUser = function(obj, callback) {
-    return firebase.auth().createUserWithEmailAndPassword(obj.email, obj.password)
-        .then(function(response) {
-            return firebase.auth().onAuthStateChanged(function(user) {
-                if (user) {
-                  // User is signed in.
-                  return callback({
-                    result : 'success',
-                    content : user
-                  })
-                } else {
-                  // No user is signed in.
-                  return callback({
-                    result : 'error',
-                    message : 'No user signed in'
-                  })
-                }
-            });
-        })
-        .catch(function(error) {
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            return callback({
-                result : 'error',
-                message : errorMessage
-            })
-        });
-}
+    // username and password is simply stored in database
 
-exports.currentUserDetails = function(callback) {
-    const userdetail = signedInUserDetails();
-    if(userdetail){
-        return firebase.database().ref('/allusers/' + userdetail.email.replace(/\./g, ",")).once('value',
-            function(snapshot) {
+    obj.password = generatePasswordHash(obj.password);  // generatePasswordHash();
+
+    return firebase.database().ref('auth/' + utilFunc.convertDotToComma(obj.email) )
+        .once('value', function(snapshot) {
+            var username = (snapshot.val() && snapshot.val().email) || 'Anonymous';
+            if(username === 'Anonymous'){
+                return database.ref('/auth/' + utilFunc.convertDotToComma(obj.email) ).set(obj, function(error) {
+                    if (error) {
+                        return callback({
+                            result : 'error',
+                            message : 'Try sign up after some time.'
+                        })
+                    }else{
+                        return callback({
+                            result : 'success',
+                            message : 'User successfully signed up: '+ obj.email
+                        })
+                    }
+                });
+            }else{
                 return callback({
-                    result : 'success',
-                    content : snapshot.val()
-                })
-            },
-            function(err) {
-                return callback({
-                    result : "success",
-                    content : 'Error fetching data of user'
+                    result : 'error',
+                    message : 'User email already exists.'
                 })
             }
-        );
-    }else{
-        return callback({
-            result : 'error',
-            message : 'No user signed in.'
+        },
+        function(err) {
+            return callback({
+                result : "error",
+                message : err.message
+            })
         })
-    }
 }
+
+// exports.currentUserDetails = function(callback) {
+//     const userdetail = signedInUserDetails();
+//     if(userdetail){
+//         return firebase.database().ref('/allusers/' + userdetail.email.replace(/\./g, ",")).once('value',
+//             function(snapshot) {
+//                 return callback({
+//                     result : 'success',
+//                     content : snapshot.val()
+//                 })
+//             },
+//             function(err) {
+//                 return callback({
+//                     result : "error",
+//                     message : 'Error fetching data of user'
+//                 })
+//             }
+//         );
+//     }else{
+//         return callback({
+//             result : 'error',
+//             message : 'No user signed in.'
+//         })
+//     }
+// }
     
-exports.signOutUser = function(callback) {
-    return firebase.auth().signOut()
-        .then(function(response) {
-            return callback('Signed out successfully');
-        }).catch(function(err){
-            return callback('Couldnt sign out. Try again.');
-        });
-}
+// exports.signOutUser = function(callback) {
+//     return firebase.auth().signOut()
+//         .then(function(response) {
+//             return callback('Signed out successfully');
+//         }).catch(function(err){
+//             return callback('Couldnt sign out. Try again.');
+//         });
+// }
 exports.createUserProfile = function(obj, callback) {
-    return database.ref('allusers/' + obj.email.replace('.',',')).set(obj, function(error) {
+    return database.ref('allusers/' + utilFunc.convertDotToComma(obj.email) ).set(obj, function(error) {
         if (error) {
-          return callback('Unable to save data against: '+ obj.email+' Please retry.')
+          return callback({
+              result : 'error',
+              message : 'Unable to save data against: '+ obj.email+' Please retry.'
+          })
         } else {
-          return callback('Data successfull saved against: '+ obj.email)
+          return callback({
+              result : 'success',
+              content : 'Data successfull saved against: '+ obj.email
+          })
         }
     });
 }
 exports.fetchUserProfile = function(obj, callback) {
-    return firebase.database().ref('/allusers/'+ obj.email.replace('.',',') ).once('value',
+    return firebase.database().ref('/allusers/'+ utilFunc.convertDotToComma(obj.email) ).once('value',
         function(snapshot) {
-            return callback(snapshot.val())
+            return callback({
+                result : 'success',
+                content : snapshot.val()
+            })
         },
         function(err) {
-            return callback('Error fetching data , try again.')
+            return callback({
+                result : 'Error',
+                content : 'Error fetching data , try again.'
+            })
         }
     );
 }
 exports.updateUserpProfileData = function(obj, callback) {
     var updates = {};
-    updates['/allusers/' + obj.email.replace(/\./g,',') ] = obj;
+    updates['/allusers/' + utilFunc.convertDotToComma(obj.email) ] = obj;
 
     return database.ref().update(updates,  
         function(error) {

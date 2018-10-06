@@ -4,9 +4,12 @@
   "scripts": {
     "client": "cd client && yarn start",
     "server": "nodemon server.js",
-    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "serverdebug": "nodemon --inspect server.js",
+    "nodedebug": "concurrently --kill-others-on-fail \"yarn serverdebug\" \"yarn client\""
   },
   "dependencies": {
+    "bcrypt": "^3.0.1",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "debug": "^3.1.0",
@@ -15,6 +18,7 @@
     "firebase": "^5.4.2",
     "isemail": "^3.1.3",
     "jade": "^1.11.0",
+    "jsonwebtoken": "^8.3.0",
     "morgan": "^1.9.0",
     "static-favicon": "^2.0.0-alpha"
   },
